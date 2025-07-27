@@ -1,4 +1,4 @@
-import { Controller, Get, Header, HttpCode, HttpRedirectResponse, Inject, Param, Post, Query, Redirect, Req, Res } from '@nestjs/common';
+import { Controller, Get, Header, HttpCode, HttpException, HttpRedirectResponse, Inject, Param, ParseIntPipe, Post, Query, Redirect, Req, Res, UseFilters } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { title } from 'process';
 import { UserService } from './user.service';
@@ -7,6 +7,7 @@ import { MailService } from '../mail/mail.service';
 import { UserRepository } from '../user-repository/user-repository';
 import { MemberService } from '../member/member.service';
 import { User } from 'generated/prisma';
+import { ValidationFilter } from 'src/validation/validation.filter';
 
 @Controller('/api/users')
 export class UserController {
@@ -39,10 +40,14 @@ export class UserController {
         @Query('first_name') firstName: string,
         @Query('last_name') lastName?: string,
     ): Promise<User> {
+        if (!firstName) {
+            throw new HttpException({code: 400, message: 'first_name is required'}, 400);
+        }
         return this.userRepository.save(firstName, lastName);
     }
 
     @Get('/hello')
+    // @UseFilters(ValidationFilter)
     async sayHello(@Query('name') name: string): Promise<string> {
         return this.service.sayHello(name);
     }
@@ -90,7 +95,7 @@ export class UserController {
     }
 
     @Get('/:id')
-    getById(@Param('id') id: string): string {
+    getById(@Param('id', ParseIntPipe) id: number): string {
         return `Get ${id}`;
     }
 
