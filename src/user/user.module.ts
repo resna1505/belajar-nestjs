@@ -10,7 +10,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 // import { createConnection } from 'net';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [],
   controllers: [UserController],
   providers: [
     UserService,
