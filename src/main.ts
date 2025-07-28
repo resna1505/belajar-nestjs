@@ -13,13 +13,16 @@ async function bootstrap() {
 
   const loggerService = app.get(WINSTON_MODULE_NEST_PROVIDER);
   app.useLogger(loggerService);
-  
+
   app.set('views', __dirname + '/../views');
   app.set('view engine', 'html');
   app.engine('html', mustache());
   // await app.listen(process.env.PORT ?? 3000);
 
   app.useGlobalFilters(new ValidationFilter());
+  // app.useGlobalPipes();
+  // app.useGlobalInterceptors();
+  // app.useGlobalGuards();
 
   const configService = app.get(ConfigService);
   await app.listen(configService.get<number>('PORT') ?? 3000);
