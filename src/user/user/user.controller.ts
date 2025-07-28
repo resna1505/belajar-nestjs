@@ -38,7 +38,7 @@ import { Auth } from 'src/auth/auth.decorator';
 import { RoleGuard } from 'src/role/role.guard';
 import { Roles } from 'src/role/roles.decorator';
 
-@UseGuards(RoleGuard)
+// @UseGuards(RoleGuard)
 @Controller('/api/users')
 export class UserController {
   // @Get("/:id")
